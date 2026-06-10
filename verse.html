@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Verse</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="phone">
+
+    <div class="header">
+      <h1>经文</h1>
+      <p>神有话要对你说</p>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="verse-page-card">
+
+      <!-- 1. TITLE -->
+      <div class="verse-title" id="verseTitle" style="font-size: x-large;">
+        当你...
+      </div>
+
+      <!-- 2. VERSE -->
+      <div class="big-verse" id="verseText" style="font-size: medium;">
+        再等一下...
+      </div>
+
+      <!-- 3. SOURCE -->
+      <div class="big-reference" id="verseReference">
+      </div>
+
+      <!-- 4. IMAGE (NOW AT BOTTOM) -->
+      <div class="verse-image">
+        <img id="verseImage" src="placeholder.jpg" alt="verse image">
+      </div>
+
+    </div>
+
+    <div class="bottom-buttons">
+
+      <button onclick="goHome()">
+        主页
+      </button>
+
+      
+
+    </div>
+
+  </div>
+
+  <script src="verses.js"></script>
+
+  <script>
+
+    const params = new URLSearchParams(window.location.search);
+    let verseId = parseInt(params.get("id"));
+
+    if (isNaN(verseId)) {
+      verseId = 0;
+    }
+
+    const verse = verses[verseId];
+
+    document.getElementById("verseTitle").innerText =
+      verse.title || "当你...";
+
+    document.getElementById("verseText").innerText =
+      verse.text;
+
+    document.getElementById("verseReference").innerText =
+      verse.reference;
+
+    document.getElementById("verseImage").src =
+      verse.image || "placeholder.jpg";
+
+    function goHome() {
+      window.location.href = "index.html";
+    }
+
+    function nextVerse() {
+      verseId++;
+      if (verseId >= verses.length) verseId = 0;
+
+      window.location.href = `verse.html?id=${verseId}`;
+    }
+
+  </script>
+
+</body>
+</html>
