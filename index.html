@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Bible NFC Index</title>
+  <title>Blessing NFC</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -13,21 +13,43 @@
   <div class="phone">
 
     <div class="header">
-      <h1>经文</h1>
-      <p>神有话要对你说</p>
+      <h1>来自神的祝福</h1>
+      
     </div>
 
-    <!-- DAILY CARD -->
+    <!-- Daily Verse -->
     <div class="card">
-      <h2>Daily Verse</h2>
-      <p id="dailyText">Loading...</p>
-      <button onclick="openDaily()">Read</button>
+      <h2>每日经文</h2>
+
+      <p id="dailyVerseText">
+        稍等...
+      </p>
+
+      <span id="dailyVerseRef"></span>
+
+      <button onclick="openDailyVerse()">
+        今天神有话要对你说
+      </button>
     </div>
 
-    <!-- VERSE LIST -->
+    <!-- Random Verse -->
     <div class="card">
-      <h2>All Verses</h2>
-      <div id="verseList"></div>
+      <h2>领受祝福</h2>
+
+      <p>
+        点击下方获取祝福经文
+      </p>
+
+      <button onclick="randomVerse()">
+        随机经文
+      </button>
+    </div>
+
+    <!-- Verse List -->
+    <div class="card">
+      <h2>我的收藏</h2>
+
+      <div class="verse-list" id="verseList"></div>
     </div>
 
   </div>
@@ -36,43 +58,47 @@
 
   <script>
 
-    // =========================
-    // 🔥 MARK ENTRY AS INDEX
-    // =========================
-    localStorage.setItem("entryPage", "index");
-
-    // =========================
     // DAILY VERSE
-    // =========================
     const today = new Date().getDate();
     const dailyIndex = today % verses.length;
+    const dailyVerse = verses[dailyIndex];
 
-    document.getElementById("dailyText").innerText =
-      verses[dailyIndex].title;
+    document.getElementById("dailyVerseText").innerText =
+      dailyVerse.text;
 
-    function openDaily() {
-      window.location.href = `verse.html?id=${dailyIndex}`;
+    document.getElementById("dailyVerseRef").innerText =
+      dailyVerse.reference;
+
+    function openDailyVerse(){
+      window.location.href = `verse.html?id=${index}&from=index`;
     }
 
-    // =========================
-    // BUILD VERSE LIST
-    // =========================
-    const list = document.getElementById("verseList");
+    // RANDOM VERSE
+    function randomVerse(){
 
-    verses.forEach((v, i) => {
+      const randomIndex =
+        Math.floor(Math.random() * verses.length);
 
-      const btn = document.createElement("button");
+      window.location.href = `verse.html?id=${index}&from=index`;
+    }
 
-      btn.innerText = v.title || v.reference;
+    // VERSE COLLECTION
+    const verseList =
+      document.getElementById("verseList");
 
-      btn.style.display = "block";
-      btn.style.margin = "8px 0";
+    verses.forEach((verse, index) => {
 
-      btn.onclick = () => {
-        window.location.href = `verse.html?id=${i}`;
+      const button =
+        document.createElement("button");
+
+      button.innerText =
+        verse.title;
+
+      
+      button.onclick = () => {
+        window.location.href = `verse.html?id=${index}&from=index`;
       };
-
-      list.appendChild(btn);
+      verseList.appendChild(button);
     });
 
   </script>
