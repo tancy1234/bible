@@ -21,12 +21,12 @@
     <div class="verse-page-card">
 
       <!-- 1. TITLE -->
-      <div class="verse-title" id="verseTitle" style="font-size: x-large;">
+      <div class="verse-title" id="verseTitle" style="font-size:x-large;">
         当你...
       </div>
 
       <!-- 2. VERSE -->
-      <div class="big-verse" id="verseText" style="font-size: medium;">
+      <div class="big-verse" id="verseText" style="font-size:medium;">
         再等一下...
       </div>
 
@@ -34,20 +34,19 @@
       <div class="big-reference" id="verseReference">
       </div>
 
-      <!-- 4. IMAGE (NOW AT BOTTOM) -->
+      <!-- 4. IMAGE (BOTTOM) -->
       <div class="verse-image">
         <img id="verseImage" src="placeholder.jpg" alt="verse image">
       </div>
 
     </div>
 
+    <!-- BUTTON AREA -->
     <div class="bottom-buttons">
 
-      <button onclick="goHome()">
-        主页
+      <button id="backBtn" onclick="goHome()">
+        Home
       </button>
-
-      
 
     </div>
 
@@ -58,7 +57,9 @@
   <script>
 
     const params = new URLSearchParams(window.location.search);
+
     let verseId = parseInt(params.get("id"));
+    let from = params.get("from"); // 👈 THIS IS THE KEY
 
     if (isNaN(verseId)) {
       verseId = 0;
@@ -66,6 +67,7 @@
 
     const verse = verses[verseId];
 
+    // LOAD CONTENT
     document.getElementById("verseTitle").innerText =
       verse.title || "当你...";
 
@@ -78,15 +80,18 @@
     document.getElementById("verseImage").src =
       verse.image || "placeholder.jpg";
 
-    function goHome() {
-      window.location.href = "index.html";
+
+    // ======================
+    // 🔥 BACK BUTTON LOGIC
+    // ======================
+
+    if (from !== "index") {
+      // Scenario 1: direct entry → hide button
+      document.getElementById("backBtn").style.display = "none";
     }
 
-    function nextVerse() {
-      verseId++;
-      if (verseId >= verses.length) verseId = 0;
-
-      window.location.href = `verse.html?id=${verseId}`;
+    function goHome() {
+      window.location.href = "index.html";
     }
 
   </script>
