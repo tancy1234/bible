@@ -17,24 +17,31 @@
       <p>神有话要对你说</p>
     </div>
 
+    <!-- MAIN CARD -->
     <div class="verse-page-card">
 
-      <div class="verse-title" id="verseTitle">
+      <!-- 1. TITLE -->
+      <div class="verse-title" id="verseTitle" style="font-size:x-large;">
         当你...
       </div>
 
-      <div class="big-verse" id="verseText">
-        Loading...
+      <!-- 2. VERSE -->
+      <div class="big-verse" id="verseText" style="font-size:medium;">
+        再等一下...
       </div>
 
-      <div class="big-reference" id="verseReference"></div>
+      <!-- 3. SOURCE -->
+      <div class="big-reference" id="verseReference">
+      </div>
 
+      <!-- 4. IMAGE (BOTTOM) -->
       <div class="verse-image">
-        <img id="verseImage" src="placeholder.jpg">
+        <img id="verseImage" src="placeholder.jpg" alt="verse image">
       </div>
 
     </div>
 
+    <!-- BUTTON AREA -->
     <div class="bottom-buttons">
 
       <button id="backBtn" onclick="goHome()">
@@ -52,13 +59,15 @@
     const params = new URLSearchParams(window.location.search);
 
     let verseId = parseInt(params.get("id"));
-    if (isNaN(verseId)) verseId = 0;
+    let from = params.get("from"); // 👈 THIS IS THE KEY
+
+    if (isNaN(verseId)) {
+      verseId = 0;
+    }
 
     const verse = verses[verseId];
 
-    // =========================
-    // LOAD DATA
-    // =========================
+    // LOAD CONTENT
     document.getElementById("verseTitle").innerText =
       verse.title || "当你...";
 
@@ -71,13 +80,13 @@
     document.getElementById("verseImage").src =
       verse.image || "placeholder.jpg";
 
-    // =========================
-    // 🔥 BACK BUTTON RULE
-    // =========================
-    let entryPage = localStorage.getItem("entryPage");
 
-    // only show back button if user came from index
-    if (entryPage !== "index") {
+    // ======================
+    // 🔥 BACK BUTTON LOGIC
+    // ======================
+
+    if (from !== "index") {
+      // Scenario 1: direct entry → hide button
       document.getElementById("backBtn").style.display = "none";
     }
 
