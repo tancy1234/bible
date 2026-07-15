@@ -70,7 +70,7 @@
       dailyVerse.reference;
 
     function openDailyVerse(){
-      window.location.href = `verse.html?id=${index}&from=index`;
+      window.location.href = `verse.html?id=${dailyIndex}&from=index`;
     }
 
     // RANDOM VERSE
@@ -79,7 +79,7 @@
       const randomIndex =
         Math.floor(Math.random() * verses.length);
 
-      window.location.href = `verse.html?id=${index}&from=index`;
+      window.location.href = `verse.html?id=${randomIndex}&from=index`;
     }
 
     // VERSE COLLECTION
