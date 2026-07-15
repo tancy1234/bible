@@ -85,13 +85,23 @@
     // 🔥 BACK BUTTON LOGIC
     // ======================
 
-    if (from !== "index") {
-      // Scenario 1: direct entry → hide button
-      document.getElementById("backBtn").style.display = "none";
+    if (from === "index" || from === "show") {
+        document.getElementById("backBtn").style.display = "block";
+    } else {
+        document.getElementById("backBtn").style.display = "none";
     }
 
+    
+    const home = params.get("home");
+
     function goHome() {
-      window.location.href = "index.html";
+
+        if (from === "show") {
+            window.location.href = "show.html";
+        } else {
+            window.location.href = "index.html";
+        }
+
     }
 
   </script>
