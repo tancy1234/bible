@@ -45,11 +45,148 @@
       </button>
     </div>
 
-  </div>
+    <div class="card">
 
+      <h2>💌 分享恩典（24小时）</h2>
+
+
+      <!-- Posts display area -->
+      <div id="postList">
+
+        <p>
+          还没有分享，成为第一个祝福别人吧！
+        </p>
+
+      </div>
+
+
+      <button onclick="openPostBox()">
+        ＋ 分享
+      </button>
+
+    </div>
+  </div>
+  <!-- PUT POPUP HERE (outside phone) -->
+
+  <div id="postPopup" class="popup">
+
+    <div class="popup-box">
+
+      <h2>💌 分享恩典</h2>
+
+
+      <!-- Type Dropdown -->
+      <label>
+        分享类型
+      </label>
+
+      <select id="postType">
+
+        <option value="testimony">
+          🌿 见证
+        </option>
+
+        <option value="prayer">
+          🙏 代祷
+        </option>
+
+        <option value="content">
+          📖 经文
+        </option>
+
+      </select>
+
+
+
+      <!-- Message Area -->
+
+      <label>
+        分享内容
+      </label>
+
+
+      <textarea
+        id="postMessage"
+        maxlength="200"
+        placeholder="写下神在你生命中的作为..."
+      ></textarea>
+
+
+      <div class="word-count">
+        最多 200 字
+      </div>
+
+
+
+      <div class="popup-buttons">
+
+        <button onclick="submitPost()">
+          发布
+        </button>
+
+
+        <button onclick="closePostBox()">
+          取消
+        </button>
+
+      </div>
+
+
+    </div>
+
+  </div>
   <script src="verses.js"></script>
 
-  <script>
+  <script type="module">
+    
+    import {
+        db,
+        auth,
+        loginUser
+    }
+    from "./firebase.js";
+
+
+    import {
+
+        collection,
+        addDoc,
+        getDocs,
+        query,
+        orderBy
+
+    }
+    from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    // Login anonymous user
+    let currentUser;
+    currentUser = await loginUser();
+
+
+    console.log(
+        "User ID:",
+        currentUser.uid
+    );
+
+    try {
+
+        const user = await loginUser();
+
+
+        console.log(
+            "User ID:",
+            user.uid
+        );
+
+    }
+    catch(error){
+
+        console.log(
+            "Firebase Login Error:",
+            error
+        );
+    }
+
+    loadPosts();
 
     // DAILY VERSE
     const today = new Date().getDate();
@@ -62,39 +199,199 @@
     document.getElementById("dailyVerseRef").innerText =
       dailyVerse.reference;
 
-    function openDailyVerse(){
-      window.location.href = `verse.html?id=${dailyIndex}&from=show`;
+    window.openDailyVerse = function(){
+
+  window.location.href =
+      `verse.html?id=${dailyIndex}&from=show`;
+
     }
 
+
+
     // RANDOM VERSE
-    function randomVerse(){
+
+    window.randomVerse = function(){
 
       const randomIndex =
         Math.floor(Math.random() * verses.length);
 
-      window.location.href = `verse.html?id=${randomIndex}&from=show`;
+
+      window.location.href =
+      `verse.html?id=${randomIndex}&from=show`;
+
     }
 
     // VERSE COLLECTION
-    const verseList =
-      document.getElementById("verseList");
+    
 
-    verses.forEach((verse, index) => {
 
-      const button =
-        document.createElement("button");
 
-      button.innerText =
-        verse.title;
 
-      
-      button.onclick = () => {
-        window.location.href = `verse.html?id=${index}&from=show`;
-      };
-      verseList.appendChild(button);
-    });
 
+    window.openPostBox = function(){
+
+        document.getElementById("postPopup")
+        .style.display="block";
+
+    }
+
+
+
+    window.closePostBox = function(){
+
+        document.getElementById("postPopup")
+        .style.display="none";
+
+    }
+
+
+
+    window.submitPost = async function(){
+
+
+        let message =
+        document.getElementById("postMessage")
+        .value
+        .trim();
+
+
+        let type =
+        document.getElementById("postType")
+        .value;
+
+
+
+        if(message === ""){
+            alert("请输入内容");
+            return;
+        }
+
+        try{
+            await addDoc(
+                collection(db,"posts"),
+
+                {
+
+                    message: message,
+
+                    type: type,
+
+                    createdAt: Date.now(),
+
+                    ownerId: currentUser.uid
+
+                }
+            );
+            alert("发布成功 ❤️");
+            document.getElementById("postMessage")
+            .value="";
+            closePostBox();
+
+            loadPosts();  
+        }
+        catch(error){
+            console.log(
+                "Firebase Error:",
+                error.code
+            );
+            console.log(
+                error.message
+            );
+            alert(
+                error.code + "\n\n" + error.message
+            );
+        }
+    }
+
+
+    async function loadPosts(){
+
+
+        const postList =
+        document.getElementById("postList");
+
+
+        postList.innerHTML = "";
+
+
+        const q = query(
+            collection(db,"posts"),
+            orderBy("createdAt","desc")
+        );
+
+
+        const snapshot =
+        await getDocs(q);
+
+
+
+        if(snapshot.empty){
+
+            postList.innerHTML =
+            `
+            <p>
+            还没有分享，成为第一个祝福别人吧！
+            </p>
+            `;
+
+            return;
+
+        }
+
+
+
+        snapshot.forEach((doc)=>{
+
+
+            const data = doc.data();
+
+
+
+            let icon = "🌿";
+
+
+            if(data.type === "prayer"){
+
+                icon = "🙏";
+
+            }
+
+
+
+            postList.innerHTML +=
+            `
+
+            <div class="post-item">
+
+
+                <h3>
+                ${icon}
+                ${data.type === "prayer" ? "代祷" : "见证"}
+                </h3>
+
+
+                <p>
+                ${data.message}
+                </p>
+
+
+                <small>
+                ${new Date(data.createdAt)
+                .toLocaleString()}
+                </small>
+
+
+            </div>
+
+
+            `;
+
+
+        });
+
+
+    }
   </script>
-
+  
 </body>
 </html>
