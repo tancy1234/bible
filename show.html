@@ -95,42 +95,29 @@
         </option>
 
       </select>
-
-
-
       <!-- Message Area -->
 
       <label>
         分享内容
       </label>
-
-
       <textarea
         id="postMessage"
         maxlength="200"
         placeholder="写下神在你生命中的作为..."
       ></textarea>
 
-
       <div class="word-count">
         最多 200 字
       </div>
 
-
-
       <div class="popup-buttons">
-
         <button onclick="submitPost()">
           发布
         </button>
-
-
         <button onclick="closePostBox()">
           取消
         </button>
-
       </div>
-
 
     </div>
 
@@ -201,7 +188,7 @@
 
     window.openDailyVerse = function(){
 
-  window.location.href =
+      window.location.href =
       `verse.html?id=${dailyIndex}&from=show`;
 
     }
@@ -348,11 +335,21 @@
 
 
             let icon = "🌿";
+            let title = "见证";
 
 
             if(data.type === "prayer"){
 
                 icon = "🙏";
+                title = "代祷";
+
+            }
+
+
+            else if(data.type === "content"){
+
+                icon = "📖";
+                title = "经文";
 
             }
 
@@ -365,8 +362,7 @@
 
 
                 <h3>
-                ${icon}
-                ${data.type === "prayer" ? "代祷" : "见证"}
+                ${icon} ${title}
                 </h3>
 
 
