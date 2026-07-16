@@ -356,11 +356,21 @@
 
 
             let icon = "🌿";
+            let title = "见证";
 
 
             if(data.type === "prayer"){
 
                 icon = "🙏";
+                title = "代祷";
+
+            }
+
+
+            else if(data.type === "content"){
+
+                icon = "📖";
+                title = "经文";
 
             }
 
@@ -373,8 +383,7 @@
 
 
                 <h3>
-                ${icon}
-                ${data.type === "prayer" ? "代祷" : "见证"}
+                ${icon} ${title}
                 </h3>
 
 
