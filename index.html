@@ -149,7 +149,9 @@
         addDoc,
         getDocs,
         query,
-        orderBy
+        orderBy,
+        deleteDoc,
+        doc
 
     }
     from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
@@ -345,11 +347,21 @@
 
 
             let icon = "🌿";
+            let title = "见证";
 
 
             if(data.type === "prayer"){
 
                 icon = "🙏";
+                title = "代祷";
+
+            }
+
+
+            else if(data.type === "content"){
+
+                icon = "📖";
+                title = "经文";
 
             }
 
@@ -362,8 +374,7 @@
 
 
                 <h3>
-                ${icon}
-                ${data.type === "prayer" ? "代祷" : "见证"}
+                ${icon} ${title}
                 </h3>
 
 
@@ -378,13 +389,66 @@
                 </small>
 
 
+
+                <button onclick="deletePost('${doc.id}')">
+
+                🗑 删除
+
+                </button>
+
+
             </div>
+
 
 
             `;
 
 
         });
+      }
+
+      window.deletePost = async function(id){
+
+
+          let confirmDelete =
+          confirm("确定删除这个分享吗？");
+
+
+          if(!confirmDelete){
+
+              return;
+
+          }
+
+
+          try{
+
+
+              await deleteDoc(
+                  doc(db,"posts",id)
+              );
+
+
+              alert("删除成功");
+
+
+              loadPosts();
+
+
+          }
+
+          catch(error){
+
+
+              console.log(error);
+
+
+              alert("删除失败");
+
+
+          }
+
+
       }
       // VERSE COLLECTION
       const verseList =
