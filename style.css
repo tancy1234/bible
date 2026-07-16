@@ -169,3 +169,240 @@ button:hover{
   object-fit:cover;
   background:#3E2723;
 }
+
+
+
+/* Popup background */
+
+.popup {
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(60,40,20,0.55);
+
+    z-index:9999;
+
+}
+
+
+
+/* Popup card */
+
+.popup-box {
+
+
+    width:85%;
+
+    max-width:360px;
+
+    background:#fff8ed;
+
+    margin:120px auto;
+
+
+    padding:25px;
+
+
+    border-radius:25px;
+
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.2);
+
+
+}
+
+
+
+.popup-box h2 {
+
+    text-align:center;
+
+    color:#6b4226;
+
+    margin-bottom:20px;
+
+}
+
+
+
+
+.popup-box label {
+
+
+    display:block;
+
+    color:#7b5130;
+
+    font-size:14px;
+
+    margin-bottom:8px;
+
+}
+
+
+
+/* Dropdown */
+
+#postType {
+
+
+    width:100%;
+
+
+    padding:13px;
+
+
+    border-radius:15px;
+
+
+    border:1px solid #c9a47a;
+
+
+    background:#fff;
+
+
+    font-size:16px;
+
+
+    color:#5b3820;
+
+
+    margin-bottom:18px;
+
+
+}
+
+
+
+/* Text area */
+
+#postMessage {
+
+
+    width:100%;
+
+
+    height:130px;
+
+
+    box-sizing:border-box;
+
+
+    resize:none;
+
+
+    padding:15px;
+
+
+    border-radius:18px;
+
+
+    border:1px solid #c9a47a;
+
+
+    background:#fff;
+
+
+    font-size:16px;
+
+
+    line-height:1.5;
+
+
+    outline:none;
+
+
+}
+
+
+#postMessage:focus {
+
+
+    border-color:#8b5e34;
+
+
+    box-shadow:
+    0 0 5px rgba(139,94,52,0.3);
+
+
+}
+
+
+
+/* Word count */
+
+.word-count {
+
+
+    text-align:right;
+
+    font-size:12px;
+
+    color:#999;
+
+    margin-top:5px;
+
+
+}
+
+
+
+/* Buttons */
+
+.popup-buttons {
+
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:20px;
+
+
+}
+
+
+.popup-buttons button {
+
+
+    flex:1;
+
+
+    padding:12px;
+
+
+    border:none;
+
+
+    border-radius:15px;
+
+
+    font-size:16px;
+
+
+}
+
+
+.popup-buttons button:first-child {
+
+
+    background:#8b5e34;
+
+    color:white;
+
+
+}
+
+
+.popup-buttons button:last-child {
+
+
+    background:#ddd;
+
+
+}
