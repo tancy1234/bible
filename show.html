@@ -140,7 +140,9 @@
         addDoc,
         getDocs,
         query,
-        orderBy
+        orderBy,
+        deleteDoc,
+        doc
 
     }
     from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
@@ -210,10 +212,6 @@
 
     // VERSE COLLECTION
     
-
-
-
-
 
     window.openPostBox = function(){
 
@@ -291,102 +289,98 @@
     }
 
 
-    async function loadPosts(){
+    async function loadPosts() {
 
+          const now = Date.now();
+          const oneDay = 24 * 60 * 60 * 1000;
 
-        const postList =
-        document.getElementById("postList");
+          const postList =
+              document.getElementById("postList");
 
+          postList.innerHTML = "";
 
-        postList.innerHTML = "";
+          let postCount = 0;
 
+          const q = query(
+              collection(db, "posts"),
+              orderBy("createdAt", "desc")
+          );
 
-        const q = query(
-            collection(db,"posts"),
-            orderBy("createdAt","desc")
-        );
+          const snapshot = await getDocs(q);
 
+          for (const document of snapshot.docs) {
 
-        const snapshot =
-        await getDocs(q);
+              const data = document.data();
 
+              // Delete expired post (older than 24 hours)
+              if (now - data.createdAt > oneDay) {
 
+                  await deleteDoc(
+                      doc(db, "posts", document.id)
+                  );
 
-        if(snapshot.empty){
+                  continue;
+              }
 
-            postList.innerHTML =
-            `
-            <p>
-            还没有分享，成为第一个祝福别人吧！
-            </p>
-            `;
+              // Select icon and title
+              let icon = "🌿";
+              let title = "见证";
 
-            return;
+              if (data.type === "prayer") {
 
-        }
+                  icon = "🙏";
+                  title = "代祷";
 
+              }
+              else if (data.type === "content") {
 
+                  icon = "📖";
+                  title = "经文";
 
-        snapshot.forEach((doc)=>{
+              }
 
+              // Display post
+              postList.innerHTML += `
 
-            const data = doc.data();
+                  <div class="post-item">
 
+                      <h3>
+                          ${icon} ${title}
+                      </h3>
 
+                      <p>
+                          ${data.message}
+                      </p>
 
-            let icon = "🌿";
-            let title = "见证";
+                      <small>
+                          ${new Date(data.createdAt).toLocaleString()}
+                      </small>
 
+                      <button onclick="deletePost('${document.id}')">
+                          🗑 删除
+                      </button>
 
-            if(data.type === "prayer"){
+                  </div>
 
-                icon = "🙏";
-                title = "代祷";
+              `;
 
-            }
+              postCount++;
 
+          }
 
-            else if(data.type === "content"){
+          // No valid posts
+          if (postCount === 0) {
 
-                icon = "📖";
-                title = "经文";
+              postList.innerHTML = `
+                  <p>
+                      还没有分享，成为第一个祝福别人吧！
+                  </p>
+              `;
 
-            }
+          }
 
+      }
 
-
-            postList.innerHTML +=
-            `
-
-            <div class="post-item">
-
-
-                <h3>
-                ${icon} ${title}
-                </h3>
-
-                <br>
-                <p>
-                ${data.message}
-                </p>
-
-                <br>
-                <small>
-                ${new Date(data.createdAt)
-                .toLocaleString()}
-                </small>
-
-
-            </div>
-
-
-            `;
-
-
-        });
-
-
-    }
   </script>
   
 </body>
